@@ -17,77 +17,30 @@ import InventoryCard from "../components/InventoryCard";
 export default function Dashboard() {
   const [dashboard, setDashboard] = useState(null);
   const [stats, setStats] = useState(null);
-  const [tip, setTip] = useState(null);
+  const [tips, setTips] = useState(null);
   const [inventory, setInventoryState] = useState([]);
-  const [alerts, setAlerts] = useState([]);
 
-  // ---- Dashboard data ----
   useEffect(() => {
-    (async () => {
-      try {
-        const d = await getDashboardData();
-        setDashboard(d);
-
-        // Generate dummy alerts until backend provides real ones
-        setAlerts([1, 2, 1]);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, []);
-
-  // ---- System Stats ----
-  useEffect(() => {
-    (async () => {
-      try {
-        const s = await getSystemStats();
-        setStats(s);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, []);
-
-  // ---- Optimization Tip ----
-  useEffect(() => {
-    (async () => {
-      try {
-        const t = await getOptimizationTips();
-        setTip(t);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, []);
-
-  // ---- Inventory ----
-  useEffect(() => {
-    (async () => {
-      try {
-        const iv = await getInventory();
-        setInventoryState(iv);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
+    getDashboardData().then(setDashboard).catch(console.error);
+    getSystemStats().then(setStats).catch(console.error);
+    getOptimizationTips().then(setTips).catch(console.error);
+    getInventory().then(setInventoryState).catch(console.error);
   }, []);
 
   return (
     <MainLayout>
       <Grid container spacing={3}>
-        
-        {/* ==== OVERVIEW ==== */}
+
+        {/* Overview */}
         <Grid item xs={12} md={4}>
           <Card sx={{ p: 2 }}>
             <CardContent>
               <Typography variant="h6">Overview</Typography>
-
               {dashboard ? (
                 <>
-                  <Typography>Total Items: {dashboard.totalInventoryItems}</Typography>
-                  <Typography>Low Stock: 
-                    {dashboard.lowStockCount ?? 0}
-                  </Typography>
+                  <Typography>Total Items: {dashboard.items}</Typography>
+                  <Typography>Low Stock: {dashboard.low_stock}</Typography>
+                  <Typography>Users: {dashboard.users}</Typography>
                 </>
               ) : (
                 <Typography>Loading...</Typography>
@@ -96,32 +49,32 @@ export default function Dashboard() {
           </Card>
         </Grid>
 
-        {/* ==== SYSTEM STATS ==== */}
+        {/* System Stats */}
         <Grid item xs={12} md={4}>
-          <SystemStatsCard stats={stats} />
+          <SystemStatsCard stats={dashboard?.system || stats} />
         </Grid>
 
-        {/* ==== OPTIMIZATION TIP ==== */}
+        {/* Optimization Tip */}
         <Grid item xs={12} md={4}>
           <Card sx={{ p: 2 }}>
             <Typography variant="h6">Optimization Tip</Typography>
             <Typography sx={{ mt: 1 }}>
-              {tip ? tip : "Loading..."}
+              {tips ? tips.tip : "Loading..."}
             </Typography>
           </Card>
         </Grid>
 
-        {/* ==== INVENTORY TABLE ==== */}
+        {/* Inventory */}
         <Grid item xs={12}>
           <InventoryCard inventory={inventory} />
         </Grid>
 
-        {/* ==== ALERT CHART ==== */}
+        {/* Alerts */}
         <Grid item xs={12}>
-          <AlertsChart alerts={alerts} />
+          <AlertsChart alerts={dashboard?.alerts || []} />
         </Grid>
 
-        {/* ==== PREDICT CARD ==== */}
+        {/* Prediction */}
         <Grid item xs={12}>
           <PredictCard />
         </Grid>

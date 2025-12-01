@@ -1,29 +1,21 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ProtectedRoute from "./ProtectedRoute";
-import "./App.css";
+import Dashboard from "./pages/Dashboard";
+import SystemStatsPage from "./pages/SystemStatsPage";
+import InventoryPage from "./pages/InventoryPage";
 
 export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/system-stats" element={<SystemStatsPage />} />
+        <Route path="/inventory" element={<InventoryPage />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }

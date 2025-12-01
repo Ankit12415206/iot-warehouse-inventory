@@ -1,47 +1,40 @@
 import React, { useState } from "react";
-import { Card, CardContent, TextField, Button, Typography, Box } from "@mui/material";
 import { signupUser } from "../api";
-import { useNavigate, Link } from "react-router-dom";
+import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [err, setErr] = useState("");
   const nav = useNavigate();
+  const [form, setForm] = useState({ username: "", password: "", email: "" });
 
-  const submit = async (e) => {
-    e.preventDefault();
-    setErr("");
+  const handleSignup = async () => {
     try {
-      const data = await signupUser({ username, password });
-      if (data && (data.token || data.message)) {
-        // some backend returns token, some return message
-        if (data.token) localStorage.setItem("token", data.token);
-        nav("/dashboard");
-      } else {
-        setErr("Signup failed");
-      }
+      const res = await signupUser(form);
+      localStorage.setItem("token", res.token);
+      nav("/dashboard");
     } catch (e) {
-      setErr(e.response?.data?.error || "Signup failed");
+      alert("Signup failed");
     }
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", alignItems: "center", justifyContent: "center" }}>
-      <Card sx={{ width: 420 }}>
-        <CardContent>
-          <Typography variant="h5" sx={{ mb: 2 }}>Create account</Typography>
-          <form onSubmit={submit}>
-            <TextField label="Username" value={username} onChange={e => setUsername(e.target.value)} fullWidth sx={{ mb: 2 }} />
-            <TextField label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} fullWidth sx={{ mb: 2 }} />
-            {err && <Typography color="error" sx={{ mb: 1 }}>{err}</Typography>}
-            <Button type="submit" variant="contained" fullWidth>Sign up</Button>
-          </form>
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="body2">Already have an account? <Link to="/login">Login</Link></Typography>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Card sx={{ width: 400, mx: "auto", mt: 10, p: 3 }}>
+      <CardContent>
+        <Typography variant="h5" sx={{ mb: 2 }}>Sign Up</Typography>
+
+        <TextField label="Username" fullWidth sx={{ mb: 2 }}
+          onChange={(e) => setForm({ ...form, username: e.target.value })} />
+
+        <TextField label="Email" fullWidth sx={{ mb: 2 }}
+          onChange={(e) => setForm({ ...form, email: e.target.value })} />
+
+        <TextField label="Password" type="password" fullWidth sx={{ mb: 2 }}
+          onChange={(e) => setForm({ ...form, password: e.target.value })} />
+
+        <Button variant="contained" fullWidth onClick={handleSignup}>
+          Sign Up
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
