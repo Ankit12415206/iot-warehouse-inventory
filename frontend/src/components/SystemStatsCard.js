@@ -6,26 +6,15 @@ export default function SystemStatsCard({ stats }) {
     <Card>
       <CardContent>
         <Typography variant="h6">System Stats</Typography>
-
         {stats ? (
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={4}>
-              <Typography>CPU</Typography>
-              <Typography><b>{stats.cpu.toFixed(1)}%</b></Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography>Memory</Typography>
-              <Typography><b>{stats.memory.toFixed(1)}%</b></Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography>Syscalls</Typography>
-              <Typography><b>{stats.syscalls}</b></Typography>
-            </Grid>
+            <Grid item xs={4}><b>CPU:</b> {stats.cpu}%</Grid>
+            <Grid item xs={4}><b>Memory:</b> {stats.memory}%</Grid>
+            <Grid item xs={4}><b>Syscalls:</b> {stats.syscalls}</Grid>
           </Grid>
         ) : (
-          <Typography sx={{ mt: 1 }}>Loading...</Typography>
+          <Typography>Loading...</Typography>
         )}
-
       </CardContent>
     </Card>
   );

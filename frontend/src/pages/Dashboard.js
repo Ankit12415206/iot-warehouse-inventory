@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import MainLayout from "../components/layout/MainLayout";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 
+import MainLayout from "../components/layout/MainLayout";
 import {
   getDashboardData,
   getSystemStats,
@@ -15,70 +15,52 @@ import SystemStatsCard from "../components/SystemStatsCard";
 import InventoryCard from "../components/InventoryCard";
 
 export default function Dashboard() {
-  const [dashboard, setDashboard] = useState(null);
+  const [dash, setDash] = useState(null);
   const [stats, setStats] = useState(null);
   const [tips, setTips] = useState(null);
-  const [inventory, setInventoryState] = useState([]);
+  const [inventory, setInventory] = useState([]);
 
-  useEffect(() => {
-    getDashboardData().then(setDashboard).catch(console.error);
-    getSystemStats().then(setStats).catch(console.error);
-    getOptimizationTips().then(setTips).catch(console.error);
-    getInventory().then(setInventoryState).catch(console.error);
-  }, []);
+  useEffect(() => { getDashboardData().then(setDash); }, []);
+  useEffect(() => { getSystemStats().then(setStats); }, []);
+  useEffect(() => { getOptimizationTips().then(setTips); }, []);
+  useEffect(() => { getInventory().then(setInventory); }, []);
 
   return (
     <MainLayout>
       <Grid container spacing={3}>
-
         {/* Overview */}
         <Grid item xs={12} md={4}>
-          <Card sx={{ p: 2 }}>
+          <Card>
             <CardContent>
               <Typography variant="h6">Overview</Typography>
-              {dashboard ? (
+              {dash ? (
                 <>
-                  <Typography>Total Items: {dashboard.items}</Typography>
-                  <Typography>Low Stock: {dashboard.low_stock}</Typography>
-                  <Typography>Users: {dashboard.users}</Typography>
+                  <Typography>Items: {dash.items}</Typography>
+                  <Typography>Users: {dash.users}</Typography>
                 </>
-              ) : (
-                <Typography>Loading...</Typography>
-              )}
+              ) : <Typography>Loading...</Typography>}
             </CardContent>
           </Card>
         </Grid>
 
-        {/* System Stats */}
+        {/* System stats */}
         <Grid item xs={12} md={4}>
-          <SystemStatsCard stats={dashboard?.system || stats} />
+          <SystemStatsCard stats={stats} />
         </Grid>
 
-        {/* Optimization Tip */}
+        {/* Tips */}
         <Grid item xs={12} md={4}>
-          <Card sx={{ p: 2 }}>
-            <Typography variant="h6">Optimization Tip</Typography>
-            <Typography sx={{ mt: 1 }}>
-              {tips ? tips.tip : "Loading..."}
-            </Typography>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">Optimization Tip</Typography>
+              <Typography sx={{ mt: 1 }}>{tips?.tip ?? "Loading..."}</Typography>
+            </CardContent>
           </Card>
         </Grid>
 
-        {/* Inventory */}
-        <Grid item xs={12}>
-          <InventoryCard inventory={inventory} />
-        </Grid>
-
-        {/* Alerts */}
-        <Grid item xs={12}>
-          <AlertsChart alerts={dashboard?.alerts || []} />
-        </Grid>
-
-        {/* Prediction */}
-        <Grid item xs={12}>
-          <PredictCard />
-        </Grid>
-
+        <Grid item xs={12}><InventoryCard inventory={inventory} /></Grid>
+        <Grid item xs={12}><AlertsChart alerts={dash?.alerts || []} /></Grid>
+        <Grid item xs={12}><PredictCard /></Grid>
       </Grid>
     </MainLayout>
   );

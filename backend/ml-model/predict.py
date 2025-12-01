@@ -2,18 +2,18 @@
 import sys, json
 import numpy as np
 from joblib import load
+import os
 
-MODEL_LAT = "/home/ankit06/ml-model/model_latency.pkl"
-MODEL_ANOM = "/home/ankit06/ml-model/model_anomaly.pkl"
+BASE = os.path.dirname(__file__)
+
+model_latency = load(os.path.join(BASE, "model_latency.pkl"))
+model_anom = load(os.path.join(BASE, "model_anomaly.pkl"))
 
 try:
     data = json.loads(sys.argv[1])
 except:
     print(json.dumps({"error": "invalid_input"}))
     exit()
-
-model_latency = load(MODEL_LAT)
-model_anom = load(MODEL_ANOM)
 
 features = [
     data.get("pid", 0),
@@ -26,11 +26,11 @@ features = [
 ]
 
 pred = float(model_latency.predict([features])[0])
-anom_score = float(model_anom.decision_function([features])[0])
-is_anom = anom_score < -0.2
+score = float(model_anom.decision_function([features])[0])
+is_anom = score < -0.2
 
 print(json.dumps({
     "predicted_latency_us": pred,
-    "anomaly_score": anom_score,
+    "anomaly_score": score,
     "is_anomalous": is_anom
 }))
