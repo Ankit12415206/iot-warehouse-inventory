@@ -1,9 +1,10 @@
+const { findUser, addUser, updatePassword, listUsers } = require("./users_sql");
+console.log("### LOADED user module FROM:", require.resolve("./users_sql"));
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const { spawn } = require("child_process");
 const db = require("./db");
-const { findUser, addUser, updatePassword, listUsers } = require("./users_sql");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const app = express();
@@ -29,6 +30,7 @@ app.post("/api/signup", (req, res) => {
 app.post("/api/login", (req, res) => {
   const { username, password } = req.body;
   const u = findUser(username);
+  console.log("LOGIN DEBUG USER:", u);
   if (!u) return res.status(401).json({ error: "invalid_credentials" });
   const ok = bcrypt.compareSync(password, u.password_hash || u.passwordHash || "");
   if (!ok) return res.status(401).json({ error: "invalid_credentials" });

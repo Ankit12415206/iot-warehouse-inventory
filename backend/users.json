@@ -1,8 +1,0 @@
-[
-  {
-    "username": "admin",
-    "passwordHash": "$2a$10$uH3uQxv7Kf33K6qKm1Jq8uG6tC1V8/13H0iE9A6pMcdC5E8qcpDg6",
-    "role": "admin",
-    "email": "admin@example.com"
-  }
-]
