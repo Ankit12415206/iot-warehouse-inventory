@@ -8,13 +8,11 @@ export default function SystemStatsCard({ stats }) {
         <Typography variant="h6">System Stats</Typography>
         {stats ? (
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={4}><b>CPU:</b> {stats.cpu}%</Grid>
-            <Grid item xs={4}><b>Memory:</b> {stats.memory}%</Grid>
-            <Grid item xs={4}><b>Syscalls:</b> {stats.syscalls}</Grid>
+            <Grid item xs={4}><Typography>CPU</Typography><Typography><b>{Math.round(stats.cpu)}%</b></Typography></Grid>
+            <Grid item xs={4}><Typography>Memory</Typography><Typography><b>{Math.round(stats.memory)}%</b></Typography></Grid>
+            <Grid item xs={4}><Typography>Syscalls</Typography><Typography><b>{stats.syscalls}</b></Typography></Grid>
           </Grid>
-        ) : (
-          <Typography>Loading...</Typography>
-        )}
+        ) : <Typography sx={{ mt: 1 }}>Loading...</Typography>}
       </CardContent>
     </Card>
   );

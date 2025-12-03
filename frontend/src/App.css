@@ -1,5 +1,3 @@
-.App {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+body { margin: 0; font-family: Inter, Roboto, Arial, sans-serif; background: #f5f6fa; }
+.app-root { padding: 16px; }
+.card { box-shadow: 0 4px 16px rgba(0,0,0,0.06); border-radius: 10px; }

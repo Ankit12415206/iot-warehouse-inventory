@@ -1,18 +1,18 @@
 import React from "react";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography, List, ListItem, ListItemText } from "@mui/material";
 
-export default function InventoryCard({ inventory }) {
+export default function InventoryCard({ inventory = [] }) {
   return (
     <Card>
       <CardContent>
         <Typography variant="h6">Inventory</Typography>
-        {inventory.length === 0 ? (
-          <Typography>No items</Typography>
-        ) : (
-          inventory.map(i => (
-            <Typography key={i.id}>{i.name} — {i.stock}</Typography>
-          ))
-        )}
+        <List>
+          {inventory.length ? inventory.map(it => (
+            <ListItem key={it.id}>
+              <ListItemText primary={`${it.name} — ${it.stock}`} secondary={it.category} />
+            </ListItem>
+          )) : <Typography variant="caption">No items</Typography>}
+        </List>
       </CardContent>
     </Card>
   );
